@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile Bijoux | Portfolio & Archive</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            background: #0b0b0b;
+        }
+        .serif-title {
+            font-family: 'DM Serif Display', serif;
+        }
+        
+        /* Master Hover Link Classes */
+        .standard-link {
+            color: #ffffff;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .standard-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #00a6ff;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .standard-link:hover {
+            color: #00a6ff !important;
+        }
+        .standard-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Fixed SVG Canvas sitting over top of the sticky header */
+        .accent-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 100vh;
+            z-index: 55;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        /* Hero Layering Engine */
+        .hero-container {
+            position: relative;
+            width: 100%;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: #0b0b0b;
+            padding: 5rem 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .hero-container { padding: 5rem 3rem; }
+        }
+        @media (min-width: 1024px) {
+            .hero-container { padding: 5rem 6rem; }
+        }
+        .hero-image-wrapper {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .hero-bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.05);
+            transition: transform 0.7s ease-out;
+            filter: grayscale(40%) contrast(115%) brightness(65%);
+        }
+        .hero-container:hover .hero-bg-image {
+            transform: scale(1.02);
+            filter: grayscale(0%) contrast(105%) brightness(75%);
+        }
+        .hero-scrim {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, #0b0b0b 0%, rgba(11, 11, 11, 0.85) 40%, rgba(11, 11, 11, 0.2) 70%, transparent 100%);
+        }
+        @media (max-width: 768px) {
+            .hero-scrim {
+                background: linear-gradient(to top, #0b0b0b 20%, rgba(11, 11, 11, 0.7) 100%);
+            }
+        }
+        .hero-content-grid {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            pointer-events: none;
+        }
+        .hero-text-block {
+            grid-column: span 12;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            pointer-events: auto;
+        }
+        @media (min-width: 1024px) {
+            .hero-text-block { grid-column: span 8; }
+        }
+        @media (min-width: 1280px) {
+            .hero-text-block { grid-column: span 7; }
+        }
+
+        /* Portfolio Styles CSS Mapping */
+        .portfolio-archive-container {
+            max-width: 100%;
+            margin: 0 auto;
+            color: #e5e5e5;
+        }
+        .archive-section {
+            margin-bottom: 6rem;
+            scroll-margin-top: 7rem;
+        }
+        .section-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+        }
+        .section-number {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #737373;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 300;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .digital-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+        .article-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .card-image-wrapper {
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            position: relative;
+        }
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(110%) brightness(75%);
+            transition: all 0.5s ease;
+        }
+        .article-card:hover .card-image-wrapper img {
+            filter: grayscale(0%) contrast(100%) brightness(90%);
+            transform: scale(1.03);
+        }
+        .card-body { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+        .pub-post { color: #f87171; }
+        .pub-waikato { color: #60a5fa; }
+        .pub-cat { color: #737373; font-weight: 500; }
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 500;
+            line-height: 1.35;
+            margin: 0 0 0.75rem 0;
+            letter-spacing: -0.01em;
+        }
+        .card-text {
+            font-size: 0.875rem;
+            font-weight: 300;
+            line-height: 1.6;
+            color: #a3a3a3;
+            margin: 0 0 1.5rem 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .read-link-wrapper { margin-top: auto; }
+        .read-link {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            color: #a3a3a3;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .article-card:hover .read-link {
+            color: #00a6ff;
+            gap: 0.75rem;
+        }
+        .carousel-wrapper {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding-bottom: 2rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .carousel-wrapper::-webkit-scrollbar { height: 4px; }
+        .carousel-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .carousel-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+        }
+        .carousel-wrapper::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
+        
+        /* Visual PDF Magazine Layout Cards */
+        .magazine-card {
+            min-width: 280px;
+            max-width: 280px;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            text-decoration: none;
+        }
+        .mockup-viewport {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #1f1f1f 0%, #141414 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .mockup-viewport::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.03) 0%, transparent 60%);
+            z-index: 2;
+        }
+        .magazine-shine {
+            position: absolute;
+            top: 0; left: -150%; width: 100%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.03), transparent);
+            transform: skewX(-25deg);
+            transition: left 0.7s ease;
+            z-index: 3;
+        }
+        .magazine-card:hover .mockup-viewport {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-6px);
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.8), 0 0 20px 0 rgba(0,166,255,0.05);
+        }
+        .magazine-card:hover .magazine-shine {
+            left: 150%;
+        }
+        .mockup-content {
+            position: absolute;
+            inset: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 1;
+        }
+        .mockup-badge {
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.5rem;
+            align-self: flex-start;
+        }
+        .mockup-title-stamp {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.75rem;
+            line-height: 1.15;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: -0.02em;
+        }
+        .magazine-meta-zone h4 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #ffffff;
+            margin: 0 0 0.25rem 0;
+            transition: color 0.3s ease;
+        }
+        .magazine-card:hover .magazine-meta-zone h4 {
+            color: #00a6ff;
+        }
+        .magazine-meta-zone p {
+            font-size: 0.8rem;
+            font-weight: 300;
+            line-height: 1.4;
+            color: #737373;
+            margin: 0;
+        }
+       /* Master Theme Variables */
+:root {
+    --bg-color: #0b0b0b;
+    --text-main: #e5e5e5;
+    --text-inverse: #ffffff;
+    --border-color: rgba(255, 255, 255, 0.05);
+    --card-bg: rgba(255, 255, 255, 0.01);
+    --text-muted: #a3a3a3;
+    /* Hero Gradient: Black to transparent */
+    --hero-gradient: linear-gradient(to right, #0b0b0b 0%, rgba(11, 11, 11, 0.85) 40%, rgba(11, 11, 11, 0.2) 70%, transparent 100%);
+}
+
+/* Light Mode Overrides */
+[data-theme="light"] {
+    --bg-color: #fcfcfc;
+    --text-main: #1a1a1a;
+    --text-inverse: #0b0b0b;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --card-bg: rgba(0, 0, 0, 0.02);
+    --text-muted: #525252;
+    /* Hero Gradient: Crisp off-white to transparent */
+    --hero-gradient: linear-gradient(to right, #fcfcfc 0%, rgba(252, 252, 252, 0.85) 40%, rgba(252, 252, 252, 0.2) 70%, transparent 100%);
+    
+}
+/* Add these right inside your existing [data-theme="light"] block */
+[data-theme="light"] footer p,
+[data-theme="light"] footer a,
+[data-theme="light"] footer .text-neutral-300,
+[data-theme="light"] footer .text-neutral-400,
+[data-theme="light"] footer .text-neutral-200,
+[data-theme="light"] footer .standard-link {
+    color: #1a1a1a !important;
+}
+
+/* Make the email link go bright blue on hover in light mode for extra contrast */
+[data-theme="light"] footer .standard-link:hover {
+    color: #00a6ff !important;
+}
+
+/* Turn the copyright/location block a distinct dark grey so it looks clean */
+[data-theme="light"] footer .text-neutral-600,
+[data-theme="light"] footer .text-neutral-600 p {
+    color: #666666 !important;
+}
+/* Base Engine Rules */
+body {
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    background: var(--bg-color) !important;
+    color: var(--text-main) !important;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Force text visibility overrides in Light Mode */
+[data-theme="light"] .serif-title,
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] .hero-text-block h1,
+[data-theme="light"] .text-white {
+    color: #0b0b0b !important;
+}
+
+[data-theme="light"] .text-neutral-400,
+[data-theme="light"] .hero-text-block p {
+    color: #404040 !important;
+}
+
+/* Dynamic Hero Fade Link */
+.hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: var(--hero-gradient) !important;
+    transition: background 0.3s ease;
+}
+
+/* Layout Component Tweaks */
+header {
+    background-color: var(--bg-color) !important;
+    border-color: var(--border-color) !important;
+}
+.article-card {
+    background: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+}
+.card-text { color: var(--text-muted) !important; }
+footer { border-color: var(--border-color) !important; }
+/* Dynamic Carousel Navigation Controls */
+.carousel-nav-btn {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-muted) !important;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+.carousel-nav-btn:hover {
+    color: var(--text-inverse) !important;
+    border-color: var(--text-muted) !important;
+    background-color: var(--bg-color) !important;
+}
+    </style>
+</head>
+<body class="text-[#e5e5e5] selection:bg-neutral-800 relative overflow-x-hidden min-h-screen pl-6">
+
+  <svg class="accent-canvas" xmlns="http://www.w3.org/2000/svg">
+        <line x1="12" y1="0" x2="12" y2="10000" stroke="#00ffff" stroke-width="12" />
+        
+        <path d="M 28,10000 L 28,120 C 28,40 70,-20 180,-20" 
+              fill="none" 
+              stroke="#ff007f" 
+              stroke-width="12" 
+              stroke-linecap="round" />
+    </svg>
+
+    <header class="sticky top-0 bg-[#0b0b0b]/80 backdrop-blur-md z-50 border-b border-white/5">
+        <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between relative">
+            <a href="#" class="serif-title text-2xl tracking-wide text-white group flex items-center gap-2 relative z-50 pl-24">
+                Nile Bijoux<span class="inline-block w-2 h-2 bg-[#00a6ff] rounded-full group-hover:scale-130 transition-transform"></span>
+            </a>
+            <nav class="flex gap-8 text-[11px] font-semibold uppercase tracking-widest text-neutral-400 relative z-50">
+                <a href="#spotlight" class="hover:text-white transition-colors">Spotlight</a>
+                <a href="#archive" class="hover:text-white transition-colors">Archive</a>
+                <a href="#digital" class="hover:text-white transition-colors">Digital Features</a>
+                <a href="#print" class="hover:text-white transition-colors">Print Archives</a>
+                <button id="theme-toggle" class="ml-4 cursor-pointer text-sm font-bold tracking-widest uppercase hover:text-[#00a6ff] transition-colors" aria-label="Toggle theme">
+    🌓 Mode
+</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Section 01: Hero Showcase -->
+    <section id="hero" class="hero-container">
+        <div class="hero-image-wrapper">
+            <img src="images/nile-bijoux-action.jpg" alt="Nile Bijoux Multimedia Action Shot Layout" class="hero-bg-image">
+            <div class="hero-scrim"></div>
+        </div>
+
+        <div class="hero-content-grid pl-24">
+            <div class="hero-text-block space-y-6">
+                <h1 class="serif-title text-4xl sm:text-5xl md:text-6xl text-white leading-[1.1] tracking-tight">
+                    Journalism at the intersection of <br class="hidden md:inline">automotive, technology and travel.
+                </h1>
+                <p class="text-neutral-400 text-lg sm:text-xl font-light max-w-2xl leading-relaxed">
+                    A hybrid portfolio combining analytical reports on vehicle dynamics and electrification, alongside deep-dive consumer tech reporting and editorial coverage.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#digital" class="px-6 py-3 text-xs uppercase tracking-widest font-semibold bg-white text-black rounded-sm hover:bg-[#00a6ff] hover:text-white transition-all duration-300">View Latest Work</a>
+                    <a href="#print" class="px-6 py-3 text-xs uppercase tracking-widest font-semibold border border-white/20 text-white rounded-sm hover:bg-white/5 transition-all duration-300">Print Spreads &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-5xl mx-auto px-6 py-16 space-y-32 relative z-10 pl-24">
+
+        <section id="spotlight" class="space-y-8 scroll-mt-28">
+            <div class="border-b border-white/5 pb-4">
+                <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-500">01 / Featured Live Coverage</span>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center group">
+                <div class="overflow-hidden bg-neutral-900 aspect-[16/10] rounded-sm border border-white/5 shadow-xl relative">
+                    <img src="https://www.bmwgroup.com/content/grpw/websites/bmwgroup_com/en/news/general/2026/bmwi3/_jcr_content/main/newsarticle.coreimg.82.1920.jpeg/1773908027951/neue-klasse-zweites-modell-header-2560x896.jpeg?auto=format&fit=crop&w=1200&q=80" 
+                         alt="Electric Vehicle Powertrain and Battery Architecture Layout" 
+                         class="w-full h-full object-cover grayscale contrast-115 brightness-70 group-hover:scale-102 transition-all duration-700 ease-out">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+                </div>
+                <div class="space-y-4">
+                    <span class="text-[10px] font-bold tracking-widest text-neutral-500 uppercase">Munich World Premiere</span>
+                    <h2 class="serif-title text-3xl md:text-4xl leading-tight tracking-tight">
+                        <a href="https://www.carexpert.co.nz/car-news/the-electric-bmw-i3-is-finally-here-and-the-range-is-massive" target="_blank" class="standard-link">
+                            The Electric BMW i3 is Finally Here, and the Range is Massive
+                        </a>
+                    </h2>
+                    <p class="text-neutral-400 font-light leading-relaxed">
+                        A comprehensive look at the Neue Klasse platform ground-up rethink, assessing the "Heart of Joy" computer core system architecture and its high-voltage subsystem targets.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="archive" class="space-y-8 scroll-mt-28">
+            <div class="border-b border-white/5 pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-500">02 / Collected Records</span>
+            </div>
+
+            <div class="divide-y divide-white/5" id="archive-list">
+                <div class="archive-item py-6 grid md:grid-cols-4 gap-4 md:gap-6 items-center group transition-colors duration-300 hover:bg-white/[0.01] px-2 rounded-sm" data-category="carexpert">
+                    <span class="text-[10px] font-bold text-neutral-500 tracking-widest">CAREXPERT — NEWS</span>
+                    <div class="md:col-span-3 flex gap-6 items-center">
+                        <div class="w-24 h-16 md:w-32 md:h-20 flex-shrink-0 overflow-hidden bg-neutral-900 rounded-sm border border-white/5 shadow-md">
+                            <img src="https://cdn.bmwblog.com/wp-content/uploads/2026/03/bmw-i3-touring-renderings-00.jpg" 
+                                 alt="BMW i3 Touring Wagon concept" 
+                                 class="w-full h-full object-cover grayscale contrast-110 brightness-80 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-medium text-white">
+                                <a href="https://www.carexpert.co.nz/car-news/electric-wagon-confirmed-bmw-says-it-will-make-an-electric-i3-wagon" target="_blank" class="standard-link">Electric Wagon Confirmed: BMW Says it Will Make an Electric i3 Wagon</a>
+                            </h3>
+                            <p class="text-neutral-400 font-light text-xs mb-2">Tracking the brand's long-roof layout commitment into upcoming electric generations.</p>
+                            <a href="bmw-i3-wagon.pdf" target="_blank" class="text-[10px] uppercase font-semibold tracking-wider text-neutral-500 hover:text-[#00a6ff] inline-flex items-center gap-1 transition-colors">📄 Local PDF Archive</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="archive-item py-6 grid md:grid-cols-4 gap-4 md:gap-6 items-center group transition-colors duration-300 hover:bg-white/[0.01] px-2 rounded-sm" data-category="carexpert">
+                    <span class="text-[10px] font-bold text-neutral-500 tracking-widest">CAREXPERT — NEWS</span>
+                    <div class="md:col-span-3 flex gap-6 items-center">
+                        <div class="w-24 h-16 md:w-32 md:h-20 flex-shrink-0 overflow-hidden bg-neutral-900 rounded-sm border border-white/5 shadow-md">
+                            <img src="https://cdn.bmwblog.com/wp-content/uploads/2023/01/2023-BMW-7-Series-G70-Aventurine-Red-5.jpg" 
+                                 alt="2026 BMW 7 Series LCI" 
+                                 class="w-full h-full object-cover grayscale contrast-110 brightness-80 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-medium text-white">
+                                <a href="https://www.carexpert.co.nz/car-news/updated-bmw-7-series-is-more-than-just-a-facelift" target="_blank" class="standard-link">Updated BMW 7 Series is More Than Just a Facelift</a>
+                            </h3>
+                            <p class="text-neutral-400 font-light text-xs mb-2">Analyzing the implementation of digital windscreen mapping and i7 platform variations.</p>
+                            <a href="bmw-7-series-lci.pdf" target="_blank" class="text-[10px] uppercase font-semibold tracking-wider text-neutral-500 hover:text-[#00a6ff] inline-flex items-center gap-1 transition-colors">📄 Local PDF Archive</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="archive-item py-6 grid md:grid-cols-4 gap-4 md:gap-6 items-center group transition-colors duration-300 hover:bg-white/[0.01] px-2 rounded-sm" data-category="carexpert">
+                    <span class="text-[10px] font-bold text-neutral-500 tracking-widest">CAREXPERT — REVIEW</span>
+                    <div class="md:col-span-3 flex gap-6 items-center">
+                        <div class="w-24 h-16 md:w-32 md:h-20 flex-shrink-0 overflow-hidden bg-neutral-900 rounded-sm border border-white/5 shadow-md">
+                            <img src="https://images.carexpert.co.nz/resize/800/-/cms/v1/media/2024-toyota-land-cruiser-prado-primary-image.jpg" 
+                                 alt="2026 Toyota Land Cruiser Prado" 
+                                 class="w-full h-full object-cover grayscale contrast-110 brightness-80 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-medium text-white">
+                                <a href="https://www.carexpert.co.nz/car-reviews/2026-toyota-land-cruiser-prado-review" target="_blank" class="standard-link">2026 Toyota Land Cruiser Prado Review</a>
+                            </h3>
+                            <p class="text-neutral-400 font-light text-xs mb-2">Evaluating a retro-styled, hybrid 4WD platform for mechanical capability vs luxury cabin execution.</p>
+                            <a href="toyota-prado-2026.pdf" target="_blank" class="text-[10px] uppercase font-semibold tracking-wider text-neutral-500 hover:text-[#00a6ff] inline-flex items-center gap-1 transition-colors">📄 Local PDF Archive</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="archive-item py-6 grid md:grid-cols-4 gap-4 md:gap-6 items-center group transition-colors duration-300 hover:bg-white/[0.01] px-2 rounded-sm" data-category="carexpert">
+                    <span class="text-[10px] font-bold text-neutral-500 tracking-widest">CAREXPERT — REVIEW</span>
+                    <div class="md:col-span-3 flex gap-6 items-center">
+                        <div class="w-24 h-16 md:w-32 md:h-20 flex-shrink-0 overflow-hidden bg-neutral-900 rounded-sm border border-white/5 shadow-md">
+                            <img src="https://images.carexpert.com.au/resize/1200/-/cms/v1/media/2026-01-mg-zs-essence-hero.jpg" 
+                                 alt="2026 MG ZS" 
+                                 class="w-full h-full object-cover grayscale contrast-110 brightness-80 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-medium text-white">
+                                <a href="https://www.carexpert.co.nz/car-reviews/2026-mg-zs-review" target="_blank" class="standard-link">2026 MG ZS Review</a>
+                            </h3>
+                            <p class="text-neutral-400 font-light text-xs mb-2">A focused examination on entry-level packaging, standard safety arrays, and compact segment value metrics.</p>
+                            <a href="mg-zs-review.pdf" target="_blank" class="text-[10px] uppercase font-semibold tracking-wider text-neutral-500 hover:text-[#00a6ff] inline-flex items-center gap-1 transition-colors">📄 Local PDF Archive</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="archive-item py-6 grid md:grid-cols-4 gap-4 md:gap-6 items-center group transition-colors duration-300 hover:bg-white/[0.01] px-2 rounded-sm" data-category="carexpert">
+                    <span class="text-[10px] font-bold text-neutral-500 tracking-widest">CAREXPERT — REVIEW</span>
+                    <div class="md:col-span-3 flex gap-6 items-center">
+                        <div class="w-24 h-16 md:w-32 md:h-20 flex-shrink-0 overflow-hidden bg-neutral-900 rounded-sm border border-white/5 shadow-md">
+                            <img src="https://images.carexpert.co.nz/resize/1200/-/cms/v1/media/011225-byd-shark-6-01-lead.jpg" 
+                                 alt="2026 BYD Shark 6" 
+                                 class="w-full h-full object-cover grayscale contrast-110 brightness-80 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-medium text-white">
+                                <a href="https://www.carexpert.co.nz/car-reviews/2026-byd-shark-6-review" target="_blank" class="standard-link">2026 BYD Shark 6 Comprehensive Track & Field Test</a>
+                            </h3>
+                            <p class="text-neutral-400 font-light text-xs mb-2">Reviewing the dual-motor PHEV utility entry demanding attention in the competitive mid-size pickup market.</p>
+                            <a href="byd-shark-review.pdf" target="_blank" class="text-[10px] uppercase font-semibold tracking-wider text-neutral-500 hover:text-[#00a6ff] inline-flex items-center gap-1 transition-colors">📄 Local PDF Archive</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="archive-item py-6 grid md:grid-cols-4 gap-4 md:gap-6 items-center group transition-colors duration-300 hover:bg-white/[0.01] px-2 rounded-sm" data-category="carexpert">
+                    <span class="text-[10px] font-bold text-neutral-500 tracking-widest">CAREXPERT — REVIEW</span>
+                    <div class="md:col-span-3 flex gap-6 items-center">
+                        <div class="w-24 h-16 md:w-32 md:h-20 flex-shrink-0 overflow-hidden bg-neutral-900 rounded-sm border border-white/5 shadow-md">
+                            <img src="https://images.carexpert.com.au/crop/1200/630/cms/v1/media/kia-sportage-s-hybrid-hev-hero.jpg" 
+                                 alt="2026 Kia Sportage Hybrid" 
+                                 class="w-full h-full object-cover grayscale contrast-110 brightness-80 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-medium text-white">
+                                <a href="https://www.carexpert.co.nz/car-reviews/2026-kia-sportage-review" target="_blank" class="standard-link">2026 Kia Sportage Hybrid Road Test</a>
+                            </h3>
+                            <p class="text-neutral-400 font-light text-xs mb-2">Assessing the family SUV mid-life design refresh and real-world urban hybrid consumption loops.</p>
+                            <a href="kia-sportage-review.pdf" target="_blank" class="text-[10px] uppercase font-semibold tracking-wider text-neutral-500 hover:text-[#00a6ff] inline-flex items-center gap-1 transition-colors">📄 Local PDF Archive</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 03: Digital Grid Showcase -->
+        <section id="digital" class="archive-section scroll-mt-28">
+            <div class="section-header">
+                <span class="section-number">03 / Digital Features</span>
+                <h2 class="section-title">Online Newsroom & Columns</h2>
+            </div>
+
+            <div class="digital-grid">
+                <!-- Digital Card 1 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/m2-review.jpg" alt="BMW M2 Hero Image">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-post">The Post</span>
+                            <span class="pub-cat">Motoring</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.thepost.co.nz/a/motoring/350065184/road-test-review-bmw-m2" target="_blank" rel="noopener" class="standard-link">Road Test & Review: The Pure-Blood BMW M2</a>
+                        </h3>
+                        <p class="card-text">A definitive real-world track and road evaluation of Munich's compact performance powerhouse, stripping back the digital layers to find the true driver's car underneath.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.thepost.co.nz/a/motoring/350065184/road-test-review-bmw-m2" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Card 2 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/grecale-review.jpg" alt="Maserati Grecale Trofeo">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-post">The Post</span>
+                            <span class="pub-cat">Motoring</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.thepost.co.nz/a/motoring/350095655/road-test-maserati-grecale-trofeo-triumphant-return-form" target="_blank" rel="noopener" class="standard-link">Road Test: Maserati Grecale Trofeo's Return to Form</a>
+                        </h3>
+                        <p class="card-text">Pushing the Nettuno V6-powered crossover to its limits, analyzing whether the iconic Italian brand captured true sports car DNA in a premium SUV package.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.thepost.co.nz/a/motoring/350095655/road-test-maserati-grecale-trofeo-triumphant-return-form" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Card 3 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/earbuds-review.jpg" alt="Premium Earbuds Shakedown">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-waikato">Waikato Times</span>
+                            <span class="pub-cat">Tech</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.waikatotimes.co.nz/culture/350356051/review-putting-3-premium-wireless-earbuds-test" target="_blank" rel="noopener" class="standard-link">Review: Putting 3 Premium Wireless Earbuds to the Test</a>
+                        </h3>
+                        <p class="card-text">An uncompromising audio showdown pitting top-tier flagship active noise-canceling (ANC) wireless earbuds side-by-side on soundstage, battery, and comfort.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.waikatotimes.co.nz/culture/350356051/review-putting-3-premium-wireless-earbuds-test" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Card 4 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/summer-gadgets.jpg" alt="Summer Gadgets Suite">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-post">The Post</span>
+                            <span class="pub-cat">Tech / Column</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.thepost.co.nz/culture/350118828/niles-trial-favourite-gadgets-power-summer" target="_blank" rel="noopener" class="standard-link">Nile's Trials: The Essential Gadget Suite to Power Summer</a>
+                        </h3>
+                        <p class="card-text">From portable audio outrunners to high-efficiency mobile power, parsing through seasonal tech clutter to highlight gear that genuinely delivers on the road.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.thepost.co.nz/culture/350118828/niles-trial-favourite-gadgets-power-summer" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Card 5 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/tv-tech.jpg" alt="TV Ambient Tech">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-post">The Post</span>
+                            <span class="pub-cat">Tech / Column</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.thepost.co.nz/a/business/350099003/niles-trial-light-changing-telly-tech-more-party-trick" target="_blank" rel="noopener" class="standard-link">Nile's Trials: Light-Changing Telly Tech — Immersion or Trick?</a>
+                        </h3>
+                        <p class="card-text">Evaluating dynamic ambient display illumination backlighting systems to find out if screen-reactive home theater setups add true immersion or just distraction.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.thepost.co.nz/a/business/350099003/niles-trial-light-changing-telly-tech-more-party-trick" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Card 6 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/beverage-tech.jpg" alt="Home Beverage Tech">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-post">The Post</span>
+                            <span class="pub-cat">Tech / Column</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.thepost.co.nz/a/culture/350090102/niles-trial-latest-home-beverage-tech-worth-it" target="_blank" rel="noopener" class="standard-link">Nile's Trials: Is Smart Home Beverage Tech Actually Worth It?</a>
+                        </h3>
+                        <p class="card-text">Putting connected home drink dispensers and premium smart brewing tech under the microscope to separate high-end engineering utility from raw gimmickry.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.thepost.co.nz/a/culture/350090102/niles-trial-latest-home-beverage-tech-worth-it" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Card 7 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/sa-dining.jpg" alt="South African Dining Escape">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-waikato">Waikato Times</span>
+                            <span class="pub-cat">Travel</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.waikatotimes.co.nz/travel/360594148/south-african-al-fresco-restaurant-truly-epic-experience" target="_blank" rel="noopener" class="standard-link">A South African Al Fresco Culinary Destination: An Epic Journey</a>
+                        </h3>
+                        <p class="card-text">Capturing the sensory atmosphere, cultural history, and deep gastronomic narrative of an incredible outdoor dining landscape built around raw fire and wilderness.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.waikatotimes.co.nz/travel/360594148/south-african-al-fresco-restaurant-truly-epic-experience" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Card 8 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/barcelona-hotels.jpg" alt="La Boqueria Boutique Stays">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-waikato">Waikato Times</span>
+                            <span class="pub-cat">Travel</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.waikatotimes.co.nz/travel/360961547/barcelonas-best-boqueria-boutique-hotels" target="_blank" rel="noopener" class="standard-link">Architectural Escapes: Barcelona’s Top Stays Near La Boqueria</a>
+                        </h3>
+                        <p class="card-text">Curating the ultimate design-forward hospitality layouts nestled perfectly alongside Catalonia’s historic beating culinary heart, balancing heritage with sleek luxury.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.waikatotimes.co.nz/travel/360961547/barcelonas-best-boqueria-boutique-hotels" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Card 9 -->
+                <div class="article-card">
+                    <div class="card-image-wrapper">
+                        <img src="images/digital/carryon-essentials.jpg" alt="Carry-On Tactical Essentials">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="pub-waikato">Waikato Times</span>
+                            <span class="pub-cat">Travel / Utility</span>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="https://www.waikatotimes.co.nz/travel/360643913/frequent-flyer-shares-their-five-carry-essentials" target="_blank" rel="noopener" class="standard-link">The Modern Transit: Five Non-Negotiable Carry-On Essentials</a>
+                        </h3>
+                        <p class="card-text">Stripping away the bloated excess of long-haul travel baggage to focus exclusively on five highly tactical, durable, and critical everyday transit accessories.</p>
+                        <div class="read-link-wrapper">
+                            <a href="https://www.waikatotimes.co.nz/travel/360643913/frequent-flyer-shares-their-five-carry-essentials" target="_blank" rel="noopener" class="read-link">Read Article <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 04: Print Features (With Overlays & Controls) -->
+        <section id="print" class="archive-section relative group/carousel scroll-mt-28">
+            <div class="section-header">
+                <span class="section-number">04 / Print Feature Archives</span>
+                <h2 class="section-title">Magazine Editorial & Layout Spreads</h2>
+            </div>
+
+            <!-- Right-side fading edge blend -->
+            <div class="absolute right-0 bottom-6 top-24 w-20 bg-gradient-to-l from-[#0b0b0b] to-transparent pointer-events-none z-10 hidden md:block"></div>
+            
+            <!-- Clickable Scroll Arrow -->
+          
+
+            <div class="absolute left-0 bottom-6 top-24 w-20 bg-gradient-to-r from-[var(--bg-color)] to-transparent pointer-events-none z-10 hidden md:block"></div>
+            <div class="absolute right-0 bottom-6 top-24 w-20 bg-gradient-to-l from-[var(--bg-color)] to-transparent pointer-events-none z-10 hidden md:block"></div>
+            
+            <button 
+                onclick="document.getElementById('print-carousel').scrollBy({ left: -312, behavior: 'smooth' })"
+                class="carousel-nav-btn absolute left-4 top-[40%] -translate-y-1/2 border text-neutral-400 p-2.5 rounded-full shadow-2xl opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center z-30 cursor-pointer" 
+                aria-label="Scroll left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <button 
+                onclick="document.getElementById('print-carousel').scrollBy({ left: 312, behavior: 'smooth' })"
+                class="carousel-nav-btn absolute right-4 top-[40%] -translate-y-1/2 border text-neutral-400 p-2.5 rounded-full shadow-2xl opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center z-30 cursor-pointer" 
+                aria-label="Scroll right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+            </button>
+
+          
+
+            <!-- Carousel Container -->
+            <div id="print-carousel" class="carousel-wrapper scroll-smooth relative z-0">
+                <!-- Print Card 1 -->
+                <a href="print-features/BMW M3 Touring road test - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/m3-touring.webp" alt="BMW M3 Touring Layout Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Full Road Test</div>
+                            <div class="mockup-title-stamp">M3 TOURING</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>BMW M3 Touring Layout</h4>
+                        <p class="line-clamp-2 font-light">Uncompromising evaluation of Munich’s high-performance long-roof estate on British tarmac.</p>
+                    </div>
+                </a>
+
+                <!-- Print Card 2 -->
+                <a href="print-features/Ineos Grenadier, Scotland first drive - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/grenadier.jpg" alt="Ineos Grenadier Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Expedition</div>
+                            <div class="mockup-title-stamp">GRENADIER</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>Ineos Grenadier: Scotland Drive</h4>
+                        <p class="line-clamp-2 font-light">Tackling the remote off-road terrains of the Scottish Highlands in the modern spiritual 4x4 successor.</p>
+                    </div>
+                </a>
+
+                <!-- Print Card 3 -->
+                <a href="print-features/Jaguar F-Type last drive - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/ftype.jpg" alt="Jaguar F-Type Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Retrospective</div>
+                            <div class="mockup-title-stamp">F-TYPE V8</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>Jaguar F-Type: Final Farewell</h4>
+                        <p class="line-clamp-2 font-light">A poignant final open-road blast celebrating the closing chapter of Coventry's supercharged legacy.</p>
+                    </div>
+                </a>
+
+                <!-- Print Card 4 -->
+                <a href="print-features/M2 - Geoff Wilson interview - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/geoff-wilson.jpg" alt="Geoff Wilson Profile Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Long-form</div>
+                            <div class="mockup-title-stamp">G. WILSON</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>Geoff Wilson Interview Profile</h4>
+                        <p class="line-clamp-2 font-light">An in-depth corporate layout covering strategic disruption and management leadership execution.</p>
+                    </div>
+                </a>
+
+                <!-- Print Card 5 -->
+                <a href="print-features/FTN electric bike launch - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/ftn-motion.jpg" alt="FTN Motion Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">EV Tech</div>
+                            <div class="mockup-title-stamp">FTN MOTION</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>FTN Motion Electric Launch</h4>
+                        <p class="line-clamp-2 font-light">Documenting the engineering origins and launch of Wellington's retro-minimalist platform.</p>
+                    </div>
+                </a>
+
+                <!-- Print Card 6 -->
+                <a href="print-features/Fujifilm X-T50 travel review - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/fuji-xt50.jpg" alt="Fujifilm X-T50 Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Travel Review</div>
+                            <div class="mockup-title-stamp">FUJI X-T50</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>Fujifilm X-T50 Field Review</h4>
+                        <p class="line-clamp-2 font-light">Putting Fuji's film-simulation heavy body through a tactical street and travel layout test.</p>
+                    </div>
+                </a>
+
+                <!-- Print Card 7 -->
+                 <a href="print-features/Porsche 911 GTS road test - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/911-gts.webp" alt="Porsche 911 GTS Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Car Review</div>
+                            <div class="mockup-title-stamp">911 GTS</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>Porsche 911 GTS Review</h4>
+                        <p class="line-clamp-2 font-light">Detailed spread review evaluating the mechanical handling bounds of the GTS line.</p>
+                    </div>
+                </a>
+
+                <!-- Print Card 8 -->
+                <a href="print-features/Playstation Portal review - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/ps-portal.webp" alt="PlayStation Portal Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Hardware</div>
+                            <div class="mockup-title-stamp">PS PORTAL</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>PlayStation Portal Review Spread</h4>
+                        <p class="line-clamp-2 font-light">Evaluating Sony's dedicated handheld on network latency realities and ergonomic utility.</p>
+                    </div>
+                </a>
+
+                <!-- Print Card 9 -->
+               <a href="print-features/M2 - Tech Futures, Frances Valintine interview - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/frances-valintine.png" alt="Frances Valintine Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Tech Futures</div>
+                            <div class="mockup-title-stamp">VALINTINE</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>Frances Valintine Interview</h4>
+                        <p class="line-clamp-2 font-light">A deep design interview focusing on the rapid operational evolution of automated tech landscapes.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        <!-- Footer Section -->
+    <footer class="mt-32 pt-12 pb-16 border-t border-white/5 pl-0">
+        <div class="max-w-3xl space-y-8">
+           <!-- Top Block: High-Impact Professional Summary -->
+            <div class="space-y-4">
+                <p class="serif-title text-xl text-white tracking-wide">Nile Bijoux</p>
+                <p class="text-sm font-light text-neutral-300 leading-relaxed max-w-2xl">
+                    Multimedia journalist, editor, and content strategist specializing in automotive engineering, deep-dive technology reporting, and high-impact corporate communications. 
+                </p>
+                <p class="text-xs text-neutral-400 leading-relaxed max-w-xl">
+                    Available for editorial commissions, PR copy management, brand strategy, and end-to-end digital production.
+                </p>
+                <div class="pt-2">
+                    <a href="mailto:nilebijoux@gmail.com" class="text-sm font-medium text-neutral-200 standard-link">
+                        nilebijoux@gmail.com
+                    </a>
+                </div>
+            </div>
+
+            <!-- Middle Block: Professional Links -->
+            <div class="flex flex-wrap gap-x-8 gap-y-3 text-xs font-semibold uppercase tracking-widest text-neutral-400">
+                <a href="https://www.linkedin.com/in/nile-bijoux-69a81a15/" target="_blank" rel="noopener" class="hover:text-white transition-colors flex items-center gap-1">
+                    LinkedIn <span>↗</span>
+                </a>
+                <a href="assets/nile-bijoux-cv.pdf" target="_blank" class="hover:text-white transition-colors flex items-center gap-1">
+                    Current CV <span>📄</span>
+                </a>
+                <a href="#hero" class="hover:text-white transition-colors text-neutral-500 normal-case font-normal text-sm">
+                    Back to top ↑
+                </a>
+            </div>
+            
+            <!-- Bottom Block: Copyright & Location Tag -->
+            <div class="pt-6 border-t border-white/[0.02] flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-12 text-[10px] font-medium uppercase tracking-wider text-neutral-600">
+                <p>&copy; 2026 Nile Bijoux. All rights reserved.</p>
+                <p class="flex items-center gap-1.5">
+                    <span class="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                    Based in Glasgow, UK
+                </p>
+            </div>
+        </div>
+    </footer>
+    </main>
+
+    <script>
+        function filterSelection(c) {
+            var x, i;
+            x = document.getElementsByClassName("archive-item");
+            if (c == "all") c = "";
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+                if (x[i].className.indexOf(c) > -1) {
+                    x[i].style.display = "grid";
+                }
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            filterSelection('all');
+        });
+    </script>
+    <script>
+    const toggleBtn = document.getElementById('theme-toggle');
+    
+    // Check for saved user preference, otherwise default to dark
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    toggleBtn.addEventListener('click', () => {
+        let theme = document.documentElement.getAttribute('data-theme');
+        let newTheme = theme === 'light' ? 'dark' : 'light';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+</script>
+</body>
+</html>
