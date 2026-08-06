@@ -642,17 +642,16 @@ footer { border-color: var(--border-color) !important; }
             </div>
         </section>
 
-        <!-- Section 04: Print Features (With Overlays & Controls) -->
+        <!-- Section 04: Print Features (All 5 Spreads Restored) -->
         <section id="print" class="archive-section relative group/carousel scroll-mt-28">
             <div class="section-header">
                 <span class="section-number">04 / Print Feature Archives</span>
                 <h2 class="section-title">Magazine Editorial & Layout Spreads</h2>
             </div>
 
-            <!-- Gradients and buttons hidden securely on mobile -->
-            <div class="absolute right-0 bottom-6 top-24 w-20 bg-gradient-to-l from-[#0b0b0b] to-transparent pointer-events-none z-10 hidden md:block"></div>
-            <div class="absolute left-0 bottom-6 top-24 w-20 bg-gradient-to-r from-[var(--bg-color)] to-transparent pointer-events-none z-10 hidden md:block"></div>
+            <!-- Gradients and controls -->
             <div class="absolute right-0 bottom-6 top-24 w-20 bg-gradient-to-l from-[var(--bg-color)] to-transparent pointer-events-none z-10 hidden md:block"></div>
+            <div class="absolute left-0 bottom-6 top-24 w-20 bg-gradient-to-r from-[var(--bg-color)] to-transparent pointer-events-none z-10 hidden md:block"></div>
             
             <button onclick="document.getElementById('print-carousel').scrollBy({ left: -312, behavior: 'smooth' })" class="carousel-nav-btn absolute left-4 top-[40%] -translate-y-1/2 border text-neutral-400 p-2.5 rounded-full shadow-2xl opacity-0 group-hover/carousel:opacity-100 hidden md:flex items-center justify-center z-30 cursor-pointer" aria-label="Scroll left">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
@@ -663,6 +662,8 @@ footer { border-color: var(--border-color) !important; }
 
             <!-- Carousel Container -->
             <div id="print-carousel" class="carousel-wrapper scroll-smooth relative z-0">
+                
+                <!-- 01: M3 Touring -->
                 <a href="print-features/BMW M3 Touring road test - NB.pdf" target="_blank" class="magazine-card">
                     <div class="mockup-viewport">
                         <div class="magazine-shine"></div>
@@ -678,6 +679,7 @@ footer { border-color: var(--border-color) !important; }
                     </div>
                 </a>
 
+                <!-- 02: Ineos Grenadier -->
                 <a href="print-features/Ineos Grenadier, Scotland first drive - NB.pdf" target="_blank" class="magazine-card">
                     <div class="mockup-viewport">
                         <div class="magazine-shine"></div>
@@ -692,6 +694,55 @@ footer { border-color: var(--border-color) !important; }
                         <p class="line-clamp-2 font-light">Tackling the remote off-road terrains of the Scottish Highlands in the modern spiritual 4x4 successor.</p>
                     </div>
                 </a>
+
+                <!-- 03: McLaren 750S -->
+                <a href="print-features/McLaren 750S first drive - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/mclaren-750s.jpg" alt="McLaren 750S Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Track & Road</div>
+                            <div class="mockup-title-stamp">750S FIRST DRIVE</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>McLaren 750S First Drive</h4>
+                        <p class="line-clamp-2 font-light">Pushing Woking's refined supercar masterpiece to its limits on technical circuit layouts.</p>
+                    </div>
+                </a>
+
+                <!-- 04: Porsche 718 Spyder RS -->
+                <a href="print-features/Porsche 718 Spyder RS feature - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/spyder-rs.jpg" alt="Porsche 718 Spyder RS Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Feature Story</div>
+                            <div class="mockup-title-stamp">SPYDER RS</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>Porsche 718 Spyder RS</h4>
+                        <p class="line-clamp-2 font-light">Atmospheric intake induction noise meets mid-engine perfection in an open-top GT department swansong.</p>
+                    </div>
+                </a>
+
+                <!-- 05: Range Rover Sport SV -->
+                <a href="print-features/Range Rover Sport SV international launch - NB.pdf" target="_blank" class="magazine-card">
+                    <div class="mockup-viewport">
+                        <div class="magazine-shine"></div>
+                        <img src="images/print/range-rover-sv.jpg" alt="Range Rover Sport SV Cover" class="w-full h-full object-cover absolute inset-0 z-0">
+                        <div class="mockup-content relative z-10 bg-gradient-to-b from-black/40 via-transparent to-black/60 h-full flex flex-col justify-between">
+                            <div class="mockup-badge">Global Launch</div>
+                            <div class="mockup-title-stamp">SPORT SV</div>
+                        </div>
+                    </div>
+                    <div class="magazine-meta-zone">
+                        <h4>Range Rover Sport SV Launch</h4>
+                        <p class="line-clamp-2 font-light">International first drive coverage testing the 635hp twin-turbo V8 flag-bearer on and off the asphalt.</p>
+                    </div>
+                </a>
+
             </div>
         </section>
         
